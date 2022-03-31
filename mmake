@@ -27,18 +27,18 @@ doEcho() {
 
 usage() {
   doEcho orange "Usage:"
-  doEcho white "  $0 <args> text"
-  doEcho white ""
+  doEcho white "  $0 <args>"
+  echo
   doEcho cyan "Options:"
   doEcho orange    "  -h              : Shows this help message"
-  doEcho lightblue "  -n/--name       : Sets the name of the created executable. Defaults to 'main'"
-  doEcho lightblue "  -f/--cflag      : Adds the given cflag to the Makefile. Exclude the '-'"
-  doEcho lightblue "  -l/--lib        : Adds the given library to the Makefile. Exclude the '-l'"
-  doEcho lightblue "  -c/--compiler   : Sets the compiler version. Defaults to g++ for c++ and gcc for c"
-  doEcho lightblue "  -v/--version    : Sets the c++ version passed in through -std=, for c++ projects. Defaults to c++14"
-  doEcho blue      "  --remove-cflag  : Removes the given cflag from the Makefile. Exclude the leading '-'"
-  doEcho blue      "  --remove-lib    : Removes the given library from the Makefile. Exclude the leading '-l'"
-  doEcho white ""
+  doEcho blue "  -n/--name       : Sets the name of the created executable. Defaults to 'main'"
+  doEcho blue "  -f/--cflag      : Adds the given cflag to the Makefile. Exclude the '-'"
+  doEcho blue "  -l/--lib        : Adds the given library to the Makefile. Exclude the '-l'"
+  doEcho blue "  -c/--compiler   : Sets the compiler version. Defaults to g++ for c++ and gcc for c"
+  doEcho blue "  -v/--version    : Sets the c++ version passed in through -std=, for c++ projects. Defaults to c++14"
+  doEcho darkblue      "  --remove-cflag  : Removes the given cflag from the Makefile. Exclude the leading '-'"
+  doEcho darkblue      "  --remove-lib    : Removes the given library from the Makefile. Exclude the leading '-l'"
+  echo
   exit
 
 }
@@ -169,10 +169,8 @@ addedLibs=false
 declare -A removeFlags
 declare -A removeLibs
 
-TEMP=$(getopt -o f:c:v:n:l:h --long cflag:,compiler:,version:,name:,lib:,remove-cflag:,remove-lib: \
-              -n 'mmake' -- "$@")
-
-while true; do
+while [ ! -z "$1" ]
+do
   case "$1" in
     -h)
       usage
@@ -180,6 +178,12 @@ while true; do
       ;;
     ## Add the given cflag
     -f | --cflag) 
+      if [ -z "$2" ] || [[ $2 == -* ]]
+      then
+        doEcho red "f/cflag requires an argument!"
+        exit 4
+      fi
+
       if [ -z "$CFLAGS" ]
       then
         CFLAGS="$2"
@@ -191,6 +195,11 @@ while true; do
       ;;
     ## Add the given dependency
     -l | --lib) 
+      if [ -z "$2" ] || [[ $2 == -* ]]
+      then
+        doEcho red "l/lib requires an argument!"
+        exit 4
+      fi
       if [ -z "$LIBS" ]
       then
         LIBS="$2"
@@ -201,13 +210,23 @@ while true; do
       shift 2
       ;;
     ## Set the compiler
-    -c | --compiler) 
+    -c | --compiler)
+      if [ -z "$2" ] || [[ $2 == -* ]]
+      then
+        doEcho red "c/compiler requires an argument!"
+        exit 4
+      fi
       COMPILER="$2"
       setCompiler=true
       shift 2
       ;;
     ## Set the c++ version
     -v | --version ) 
+      if [ -z "$2" ] || [[ $2 == -* ]]
+      then
+        doEcho red "v/version requires an argument!"
+        exit 4
+      fi
       VERSION="$2"
       if [ "$projectType" == "c" ]
       then
@@ -218,15 +237,30 @@ while true; do
       ;;
     ## Set the project name
     -n | --name )
+      if [ -z "$2" ] || [[ $2 == -* ]]
+      then
+        doEcho red "n/name requires an argument!"
+        exit 4
+      fi
       NAME="$2"
       setName=true
       shift 2
       ;;
     --remove-cflag)
+      if [ -z "$2" ] || [[ $2 == -* ]]
+      then
+        doEcho red "remove-cflag requires an argument!"
+        exit 4
+      fi
       removeFlags[${#removeFlags[@]}]="$2"
       shift 2
       ;;
     --remove-lib)
+      if [ -z "$2" ] || [[ $2 == -* ]]
+      then
+        doEcho red "remove-lib requires an argument!"
+        exit 4
+      fi
       removeLibs[${#removeLibs[@]}]="$2"
       shift 2
       ;;
