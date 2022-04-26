@@ -27,7 +27,7 @@ doEcho() {
 
 usage() {
   doEcho orange "Usage:"
-  doEcho white "  $0 <args>"
+  doEcho white "  `basename $0` <args>"
   echo
   doEcho cyan "Options:"
   doEcho orange    "  -h              : Shows this help message"
