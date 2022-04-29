@@ -332,7 +332,7 @@ fi
 
 if [ "$setVersion" = false ] && [ ! -z "${mmakeconf[version]}" ]
 then
-  VERSION=${mmakeconf[cpp-version]}
+  VERSION=${mmakeconf[version]}
 fi
 
 #### Remove duplicate libs and flags
