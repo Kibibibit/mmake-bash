@@ -82,7 +82,7 @@ fi
 
 if [ "$foundC" = true ] && [ "$foundCpp" = false ]
 then
-  doEcho lightblue "This is a C Project"
+  doEcho blue "This is a C Project"
   projectType=c
   ext=c
 fi
