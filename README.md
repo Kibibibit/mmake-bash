@@ -6,7 +6,7 @@ It can be used to generate a Makefile for a c or c++ projects.
 
 # Install
 
-Installation is as simple as cloning the repo, and adding the `mmake-bash` directory to your path.
+Installation is as simple as cloning the repo, and adding the `mmake-bash/bin` directory to your path.
 
 # Usage
 
